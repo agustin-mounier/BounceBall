@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">BounceBall</string>
+    <color name="background">#192633</color>
+    <color name="lineColor">#ffca46</color>
+    <color name="circleColor1">#1e3f5c</color>
+    <color name="circleColor2">#1e3f5c</color>
+    <color name="ball">#ffe4b7</color>
+
+</resources>
