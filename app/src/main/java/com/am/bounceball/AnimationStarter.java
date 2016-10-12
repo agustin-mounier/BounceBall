@@ -1,11 +1,14 @@
 package com.am.bounceball;
 
 import android.animation.Animator;
+import android.animation.FloatEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -22,7 +25,7 @@ import java.util.Random;
 
 public class AnimationStarter extends Activity {
 
-    private static final float vel = (float) 1500 / 2400; // milis / pixel
+    private static final float vel = (float)  2400 / 1500; // pixel / seg
     private static final List<PointF> previous = new ArrayList<>();
     private static final List<ImageView> balls = new ArrayList<>();
 
@@ -64,7 +67,7 @@ public class AnimationStarter extends Activity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                ballDropAnimation();
+                balldropAnimation();
             }
 
             @Override
@@ -76,14 +79,15 @@ public class AnimationStarter extends Activity {
     }
 
 
-    private void ballDropAnimation() {
+    private void balldropAnimation() {
         ImageView ball = (ImageView) findViewById(R.id.ball);
-        ObjectAnimator tw_One = ObjectAnimator.ofFloat(ball,
+        ObjectAnimator dropAnimation = ObjectAnimator.ofFloat(ball,
                 "translationY", 0, getDisplayHeight());
-        tw_One.setDuration((long) (vel * getDisplayHeight()));
-        tw_One.setTarget(ball);
-        tw_One.setInterpolator(new AccelerateInterpolator());
-        tw_One.addListener(new Animator.AnimatorListener() {
+        dropAnimation.setDuration((long) (getDisplayHeight()/vel));
+        dropAnimation.setEvaluator(new FloatEvaluator());
+        dropAnimation.setTarget(ball);
+        dropAnimation.setInterpolator(new AccelerateInterpolator());
+        dropAnimation.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
 
@@ -104,11 +108,12 @@ public class AnimationStarter extends Activity {
 
             }
         });
+
         ValueAnimator.AnimatorUpdateListener updateListener = new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-
                 ImageView ball = (ImageView) findViewById(R.id.ball);
+                Log.i("Coords", ball.getX() + " " + ball.getY());
                 LineView line = (LineView) findViewById(R.id.lineView);
 
                 handleBallTrail(ball);
@@ -118,7 +123,7 @@ public class AnimationStarter extends Activity {
                     previous.clear();
                 }
 
-                CircleView circles = (CircleView) findViewById(R.id.CircleView);
+                CircleViewContainer circles = (CircleViewContainer) findViewById(R.id.CircleView);
                 int score = circles.collision(ball);
                 if (score != 0) {
                     updateScore(score);
@@ -126,8 +131,8 @@ public class AnimationStarter extends Activity {
                 }
             }
         };
-        tw_One.addUpdateListener(updateListener);
-        tw_One.start();
+        dropAnimation.addUpdateListener(updateListener);
+        dropAnimation.start();
     }
 
     private void updateScore(int score) {

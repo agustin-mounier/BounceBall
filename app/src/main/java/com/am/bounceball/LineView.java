@@ -82,7 +82,7 @@ public class LineView extends View {
             return false;
         if (startX == 0 && startY == 0 && endX == 0 && endY == 0)
             return false;
-        if (Math.abs(dist(startX, startY, x, y) + dist(x, y, endX, endY) - distance) < 20) {
+        if (Math.abs(dist(startX, startY, x, y) + dist(x, y, endX, endY) - distance) < 10) {
             return true;
         }
         return false;
@@ -143,6 +143,8 @@ public class LineView extends View {
         Log.i("angles", " " + angle);
         PropertyValuesHolder pvhX;
         PropertyValuesHolder pvhy;
+        PropertyValuesHolder pvhXby = PropertyValuesHolder.ofFloat("xBy", 0.5f);
+        PropertyValuesHolder pvhYby = PropertyValuesHolder.ofFloat("yBy", 0.5f);
         float dist = 0;
         if (angle < 45) {
             double rads = Math.toRadians(angle);
@@ -218,15 +220,15 @@ public class LineView extends View {
             dist = (float) dist(ball.getX(), ball.getY(), x, y);
         }
 
-        animation.setValues(pvhX, pvhy);
-        animation.setDuration((long) (vel * dist));
+        animation.setValues(pvhX, pvhy, pvhXby, pvhYby);
+        animation.setDuration((long) (dist/vel));
         animation.setInterpolator(new DecelerateInterpolator());
         animation.start();
         reset();
     }
 
     public boolean hasCollisioned(ImageView ball) {
-        return contains(ball.getX(), ball.getY());
+        return contains(ball.getX() + (ball.getWidth()/2), ball.getY() + (ball.getWidth()/2));
     }
 
     private int getDisplayHeight() {

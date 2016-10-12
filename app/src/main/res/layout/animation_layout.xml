@@ -3,8 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="@color/background"
-    android:id="@+id/container">
+    android:background="@color/background">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -30,13 +29,12 @@
             android:text="Time-Left: 120" />
     </LinearLayout>
 
-
     <com.am.bounceball.LineView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/lineView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <com.am.bounceball.CircleView xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.am.bounceball.CircleViewContainer xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/CircleView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
